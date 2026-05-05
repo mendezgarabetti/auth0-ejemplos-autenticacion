@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Perfil</title>
+  <style>
+    body { font-family: sans-serif; max-width: 640px; margin: 40px auto; padding: 0 20px; }
+    pre { background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 13px; }
+    img { border-radius: 50%; }
+  </style>
+</head>
+<body>
+  <h1>Perfil de usuario</h1>
+
+  <img src="<%= user.picture %>" alt="Avatar" width="72" />
+  <p><strong>Nombre:</strong> <%= user.name %></p>
+  <p><strong>Email:</strong> <%= user.email %></p>
+  <p><strong>ID:</strong> <%= user.sub %></p>
+
+  <details>
+    <summary>Ver todos los claims del token</summary>
+    <pre><%= JSON.stringify(user, null, 2) %></pre>
+  </details>
+
+  <br />
+  <a href="/">← Volver al inicio</a>
+  &nbsp;
+  <a href="/logout">Cerrar sesión</a>
+</body>
+</html>

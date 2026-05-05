@@ -1,10 +1,11 @@
 # Auth0 - Ejemplos de Autenticación
 
 Repositorio educativo con ejemplos funcionales de autenticación usando [Auth0](https://auth0.com).
+Cada ejemplo incluye **frontend + backend** completos y funcionales.
 
 ## ¿Qué es Auth0?
 
-Auth0 es una plataforma de autenticación y autorización como servicio (IDaaS). Implementa los protocolos estándar de la industria:
+Auth0 es una plataforma de autenticación y autorización como servicio (IDaaS) que implementa:
 
 - **OAuth 2.0** — protocolo de autorización delegada
 - **OpenID Connect (OIDC)** — capa de identidad sobre OAuth 2.0
@@ -12,43 +13,49 @@ Auth0 es una plataforma de autenticación y autorización como servicio (IDaaS).
 
 ## Ejemplos incluidos
 
-| # | Stack | Descripción |
-|---|-------|-------------|
-| [01-node-express](./01-node-express/) | Node.js + Express | Web app con sesión y rutas protegidas |
-| [02-react-spa](./02-react-spa/) | React + Vite | SPA con flujo PKCE y llamadas a API protegida |
-| [03-python-fastapi](./03-python-fastapi/) | Python + FastAPI | API REST con validación de JWT Bearer tokens |
+| # | Stack | Frontend | Backend | Enfoque |
+|---|-------|----------|---------|---------|
+| [01-js-fullstack](./01-js-fullstack/) | JS full-stack | React + Vite | Node.js + Express | Arquitectura moderna SPA + API |
+| [02-python-fullstack](./02-python-fullstack/) | Python full-stack | React + Vite | Python + FastAPI | Mismo frontend, backend en Python |
+| [03-server-side](./03-server-side/) | Server-side clásico | HTML (EJS) | Node.js + Express | Sesión en servidor, sin JWT en cliente |
+
+## Flujo general (ejemplos 01 y 02)
+
+```
+  FRONTEND (React)              AUTH0              BACKEND (API)
+       │                          │                     │
+       │──── loginWithRedirect ──►│                     │
+       │◄─── id_token             │                     │
+       │     access_token ────────┼─────────────────────┤
+       │                          │                     │
+       │──── GET /api/datos ──────┼── Bearer token ────►│
+       │                          │                ┌────┤ valida JWT
+       │◄───────── respuesta ─────┼────────────────┘    │
+```
+
+## Flujo (ejemplo 03 - server-side)
+
+```
+  NAVEGADOR                   EXPRESS (servidor)          AUTH0
+       │                            │                       │
+       │──── GET /login ───────────►│                       │
+       │                            │──── redirect ────────►│
+       │                            │◄─── /callback (code) ─│
+       │                            │──── canjea code ─────►│
+       │                            │◄─── tokens ───────────│
+       │◄─── sesión + HTML ─────────│                       │
+```
 
 ## Configuración inicial en Auth0
 
 1. Crear cuenta gratuita en [auth0.com](https://auth0.com)
 2. Ir a **Applications → Create Application**
-3. Elegir el tipo según el ejemplo:
-   - `Regular Web Application` → para Node.js Express
-   - `Single Page Application` → para React
-   - `API` → para FastAPI (en APIs → Create API)
-4. Copiar las credenciales al archivo `.env` de cada ejemplo
+   - `Single Page Application` → para los frontends React (01 y 02)
+   - `Regular Web Application` → para el ejemplo 03
+3. Ir a **APIs → Create API** → para los backends de 01 y 02
+4. Copiar las credenciales en el `.env` de cada ejemplo
 
-## Conceptos clave
-
-### Flujos de autenticación (Flows)
-
-```
-SPA / Mobile          Web App tradicional       API (Machine-to-Machine)
-     │                        │                           │
-  PKCE Flow            Authorization Code Flow       Client Credentials
-     │                        │                           │
-  Token en cliente    Token en servidor (sesión)    Token en servidor
-```
-
-### Tokens
-
-| Token | Propósito | Dónde vive |
-|-------|-----------|------------|
-| `id_token` | Identidad del usuario (JWT) | Cliente |
-| `access_token` | Acceso a APIs (JWT) | Cliente → se envía al API |
-| `refresh_token` | Renovar access_token | Servidor / Storage seguro |
-
-## Requisitos previos
+## Requisitos
 
 - Node.js >= 18
 - Python >= 3.10

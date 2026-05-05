@@ -1,0 +1,19 @@
+{
+  "name": "auth0-server-side",
+  "version": "1.0.0",
+  "description": "Autenticación Auth0 con renderizado server-side (EJS)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-openid-connect": "^2.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
